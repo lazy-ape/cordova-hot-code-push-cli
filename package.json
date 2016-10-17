@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "pretranspile": "rimraf dist",
-    "transpile": "babel src --out-dir dist --source-maps",
+    "transpile": "babel src --out-dir dist ",
     "dev": "npm run transpile -- --watch",
     "eslint": "eslint --ext=.js -c .eslintrc src",
     "test": "mocha"

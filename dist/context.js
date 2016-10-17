@@ -7,6 +7,7 @@
   var _ = require('lodash');
   var IGNORED_FILES_CONFIG_PATH = path.join(process.cwd(), '.chcpignore');
   var DEFAULT_WWW_FOLDER = path.join(process.cwd(), 'www');
+  var DEFAULT_SRC_FOLDER = path.join(process.cwd(), 'src');
   var DEFAULT_CLI_CONFIG = path.join(process.cwd(), 'cordova-hcp.json');
   var DEFAULT_IGNORE_LIST = ['.DS_Store', 'node_modules/*', 'node_modules\\*', 'chcp.json', 'chcp.manifest', '.chcp*', '.gitignore', '.gitkeep', '.git', 'package.json'];
 
@@ -22,18 +23,28 @@
     this.argv = argv ? argv : {};
     this.defaultConfig = DEFAULT_CLI_CONFIG;
     this.sourceDirectory = getSourceDirectory(argv);
-    this.manifestFilePath = path.join(this.sourceDirectory, 'chcp.manifest');
-    this.projectsConfigFilePath = path.join(this.sourceDirectory, 'chcp.json');
+    this.targetDirectory = getTargetDirectory(argv);
+    this.manifestFilePath = path.join(this.targetDirectory, 'chcp.manifest');
+    this.projectsConfigFilePath = path.join(this.targetDirectory, 'chcp.json');
     this.ignoredFiles = getIgnoredFiles();
   };
 
   function getSourceDirectory(argv) {
     var consoleArgs = argv._;
-    if (!consoleArgs || consoleArgs.length !== 2) {
+    if (!consoleArgs || consoleArgs.length < 2) {
       return DEFAULT_WWW_FOLDER;
     }
 
     return path.join(process.cwd(), consoleArgs[1]);
+  }
+
+  function getTargetDirectory(argv) {
+    var consoleArgs = argv._;
+    if (!consoleArgs || consoleArgs.length !== 3) {
+      return DEFAULT_SRC_FOLDER;
+    }
+
+    return path.join(process.cwd(), consoleArgs[2]);
   }
 
   function getIgnoredFiles() {
